@@ -1,0 +1,29 @@
+# Ignorer les environnements virtuels locaux
+venv/
+.venv/
+env/
+
+# Ignorer les caches Python et Jupyter
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# Ignorer Quarto et caches de rendu local
+.quarto/
+/report/*_files/
+/report/*.html
+/report/*.pdf
+/report/README.md
+
+# Ignorer Git et configuration de dev locale
+.git/
+.github/
+.gitignore
+.dockerignore
+docker-compose.yml
+
+# Ignorer les fichiers de logs locaux
+logs/
+*.log

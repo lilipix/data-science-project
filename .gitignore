@@ -12,7 +12,7 @@ src/03_modelisation_pred.py
 src/04_vision_cnn_tf.py
 
 # Journaux d'exécution des notebooks
-logs/*.log
+logs/
 
 
 # Environnements Virtuels

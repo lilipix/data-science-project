@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  quarto-preview:
+    build: .
+    container_name: quarto-projet-preview
+    ports:
+      - "4815:4815"
+    volumes:
+      # Monte le dossier actuel dans le conteneur pour le Live-Reload
+      - .:/app
+      # Évite d'écraser le venv système du conteneur si un dossier venv/ existe localement
+      - /app/venv/
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    # Démarre la prévisualisation quarto avec rechargement automatique en direct
+    command: quarto preview report/rapport.qmd --host 0.0.0.0 --port 4815 --no-browser
