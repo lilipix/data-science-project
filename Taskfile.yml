@@ -25,10 +25,10 @@ tasks:
       - quarto render report/rapport.qmd --to html
 
   pdf:
-    desc: Compile les notebooks puis génère le rapport au format PDF uniquement
+    desc: Compile les notebooks puis génère le rapport au format PDF (via Typst) uniquement
     cmds:
       - task: compile
-      - quarto render report/rapport.qmd --to pdf
+      - quarto render report/rapport.qmd --to typst
 
   gfm:
     desc: Compile les notebooks puis génère le rapport en GFM (Markdown) pour mettre à jour le README.md

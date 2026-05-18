@@ -16,10 +16,9 @@ format:
     code-fold: show
     code-tools: true
     highlight-style: github
-  pdf:
+  typst:
     toc: true
     number-sections: true
-    colorlinks: true
   gfm:
     output-file: "README.md"
     toc: true
