@@ -18,6 +18,14 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Update repository URL for forks dynamically
+        run: |
+          CURRENT_REPO="${{ github.repository }}"
+          echo "Current Repository detected: $CURRENT_REPO"
+          
+          # Remplace l'URL du dépôt parent par celle du dépôt actuel (fork) dans le fichier source
+          sed -i "s|aptitek/aptispace-datascience-projet|$CURRENT_REPO|g" report/rapport.qmd
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -48,7 +56,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           
           # Ajout forcé des fichiers compilés / générés par les tâches
-          git add -f README.md INSTALL.md src/0*_*.py logs/*.log report/notebooks/*.qmd report/rapport.html report/rapport.pdf
+          git add -f README.md INSTALL.md src/0*_*.py logs/*.log report/notebooks/*.qmd report/rapport.html report/rapport.pdf report/rapport.qmd
           
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Auto: Update compiled outputs (README, INSTALL, scripts, includes and logs) [skip ci]"
