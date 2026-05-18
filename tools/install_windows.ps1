@@ -27,6 +27,10 @@ choco install python3 --version=3.12.2 -y --skip-automated-dependency-resolution
 Write-Host "✍️ Installation de Quarto CLI..." -ForegroundColor Yellow
 choco install quarto -y
 
+# Git CLI
+Write-Host "✍️ Installation de Git..." -ForegroundColor Yellow
+choco install git -y
+
 # Typst (PDF Engine ultra-rapide)
 Write-Host "⚡ Installation de Typst..." -ForegroundColor Yellow
 choco install typst -y
