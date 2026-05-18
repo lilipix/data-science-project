@@ -1,6 +1,13 @@
 ﻿# PowerShell Script for Automated Environment Setup on Windows using Chocolatey
 $ErrorActionPreference = "Stop"
 
+# Vérification des privilèges Administrateur
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if (-not $isAdmin) {
+    Write-Error "⚠️ Ce script doit être exécuté en tant qu'Administrateur ! Veuillez ouvrir PowerShell en mode Administrateur et réessayer."
+    Exit
+}
+
 Write-Host "🚀 Démarrage de l'installation automatisée pour Windows..." -ForegroundColor Cyan
 
 # 1. Vérification et installation de Chocolatey
@@ -15,6 +22,14 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
 
 # Recharger les variables d'environnement dans la session actuelle
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
+# S'assurer que le chemin de Chocolatey est bien présent dans la session actuelle
+$chocoPath = "$env:ALLUSERSPROFILE\chocolatey\bin"
+if (Test-Path $chocoPath) {
+    if ($env:Path -notlike "*chocolatey*") {
+        $env:Path += ";$chocoPath"
+    }
+}
 
 # 2. Installation des dépendances système
 Write-Host "📦 Installation des outils requis..." -ForegroundColor Cyan
