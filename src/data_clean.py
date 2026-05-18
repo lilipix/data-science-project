@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from typing import List, Union
+from typing import List
 
 def load_raw_data(file_path: str) -> pd.DataFrame:
     """
@@ -26,8 +26,8 @@ def load_raw_data(file_path: str) -> pd.DataFrame:
 
 def clean_dates(df: pd.DataFrame, date_col: str) -> pd.DataFrame:
     """
-    Nettoie et uniformise la colonne de dates du DataFrame en gérant
-    les formats multiples (ex: ISO standard et format français DD/MM/YYYY HH:MM).
+    Exemple minimal fonctionnel : convertit la colonne de dates au type datetime standard.
+    Les étudiants devront l'enrichir pour gérer les fuseaux horaires ou formats locaux hétérogènes.
     
     Parameters:
     -----------
@@ -39,43 +39,47 @@ def clean_dates(df: pd.DataFrame, date_col: str) -> pd.DataFrame:
     Returns:
     --------
     pd.DataFrame
-        Le DataFrame avec la colonne de dates uniformisée au type datetime64.
+        Le DataFrame avec la colonne de dates convertie.
     """
-    # TODO: Écrire le code de nettoyage des formats de dates hétérogènes
-    # Indices : Utilisez pd.to_datetime avec les options format='mixed' ou dayfirst=True
-    raise NotImplementedError("La fonction clean_dates doit être implémentée par l'étudiant dans src/data_clean.py")
+    df = df.copy()
+    df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+    print(f"📅 Dates nettoyées dans '{date_col}'. Incohérences converties en NaNs : {df[date_col].isna().sum()}")
+    return df
 
-def impute_missing_values(df: pd.DataFrame, method: str = 'interpolate') -> pd.DataFrame:
+def impute_missing_values(df: pd.DataFrame, columns: List[str], method: str = 'interpolate') -> pd.DataFrame:
     """
-    Traite les valeurs manquantes dans le DataFrame selon la stratégie choisie.
-    - Pour la météo (température, humidité), l'interpolation linéaire temporelle est recommandée.
-    - Pour les comptages, une imputation par interpolation ou par médiane groupée peut être appliquée.
+    Exemple minimal fonctionnel : impute les valeurs manquantes à l'aide d'une interpolation 
+    linéaire ou d'une imputation par médiane sur les colonnes ciblées.
     
     Parameters:
     -----------
     df : pd.DataFrame
-        Le DataFrame avec colonnes nettoyées et indexé par le temps ou trié chronologiquement.
+        Le DataFrame d'entrée.
+    columns : List[str]
+        Les colonnes sur lesquelles appliquer l'imputation.
     method : str, default 'interpolate'
-        Méthode d'imputation : 'interpolate' (linéaire), 'median' (médiane) ou 'ffill' (Forward fill).
+        Méthode d'imputation : 'interpolate' (linéaire) ou 'median' (remplacement par la médiane).
         
     Returns:
     --------
     pd.DataFrame
-        Le DataFrame avec les valeurs imputées.
+        Le DataFrame avec valeurs manquantes imputées.
     """
-    # TODO: Écrire le code d'imputation des valeurs nulles (NaNs)
-    # Indices : Pensez à isoler les colonnes numériques et à utiliser df.interpolate() ou df.fillna()
-    raise NotImplementedError("La fonction impute_missing_values doit être implémentée par l'étudiant dans src/data_clean.py")
+    df = df.copy()
+    for col in columns:
+        if method == 'interpolate':
+            df[col] = df[col].interpolate(method='linear')
+        elif method == 'median':
+            df[col] = df[col].fillna(df[col].median())
+        else:
+            df[col] = df[col].ffill()
+    print(f"🔧 Valeurs manquantes imputées avec la méthode '{method}' pour les colonnes : {columns}")
+    return df
 
-def handle_outliers(df: pd.DataFrame, 
-                    columns: List[str], 
-                    temp_range: tuple = (-20.0, 45.0),
-                    bike_max: float = 1000.0) -> pd.DataFrame:
+def handle_outliers(df: pd.DataFrame, columns: List[str], min_val: float, max_val: float) -> pd.DataFrame:
     """
-    Détecte et traite les anomalies (outliers) physiques connues :
-    - Les températures aberrantes hors de l'intervalle temp_range sont remplacées par NaN (pour être interpolées ensuite).
-    - Les comptages négatifs de vélos sont mis à 0.
-    - Les comptages de vélos extrêmes (> bike_max) sont plafonnés ou remplacés par NaN.
+    Exemple minimal fonctionnel : remplace toutes les valeurs en dehors des seuils [min_val, max_val]
+    par NaN afin qu'elles puissent être imputées/interpolées par la suite.
     
     Parameters:
     -----------
@@ -83,39 +87,46 @@ def handle_outliers(df: pd.DataFrame,
         Le DataFrame d'entrée.
     columns : List[str]
         Les colonnes numériques à auditer.
-    temp_range : tuple, default (-20.0, 45.0)
-        Intervalle plausible de températures en Celsius.
-    bike_max : float, default 1000.0
-        Comptage de vélo horaire maximum physiquement réaliste pour une piste cyclable.
+    min_val : float
+        Le seuil minimum admissible.
+    max_val : float
+        Le seuil maximum admissible.
         
     Returns:
     --------
     pd.DataFrame
         Le DataFrame traité.
     """
-    # TODO: Détecter et traiter les valeurs aberrantes physiques
-    # Indices : Utilisez des masques booléens pour identifier les lignes hors intervalle
-    # et remplacez les par np.nan ou mettez-les à 0 selon la consigne.
-    raise NotImplementedError("La fonction handle_outliers doit être implémentée par l'étudiant dans src/data_clean.py")
+    df = df.copy()
+    for col in columns:
+        outlier_mask = (df[col] < min_val) | (df[col] > max_val)
+        outliers_count = outlier_mask.sum()
+        df.loc[outlier_mask, col] = np.nan
+        print(f"🚨 Anomalies (outliers) détectées dans '{col}' : {outliers_count} remplacées par NaN")
+    return df
 
 def feature_engineering(df: pd.DataFrame, date_col: str) -> pd.DataFrame:
     """
-    Enrichit le jeu de données en créant des caractéristiques temporelles
-    essentielles à l'analyse exploratoire et aux modèles de Machine Learning.
+    Exemple minimal fonctionnel : extrait les attributs de date basiques (heure, jour de la semaine).
+    Les étudiants pourront ajouter des encodages trigonométriques (sin/cos) ou des moyennes mobiles.
     
     Parameters:
     -----------
     df : pd.DataFrame
-        Le DataFrame d'entrée (la colonne date_col doit déjà être au format datetime).
+        Le DataFrame d'entrée.
     date_col : str
-        Le nom de la colonne temporelle.
+        Le nom de la colonne temporelle de type datetime.
         
     Returns:
     --------
     pd.DataFrame
-        Le DataFrame avec de nouvelles variables explicatives.
+        Le DataFrame enrichi avec de nouvelles colonnes descriptives.
     """
-    # TODO: Extraire les caractéristiques temporelles
-    # Indices : Utilisez les accesseurs de dates de Pandas (df[date_col].dt.hour, .dt.dayofweek, etc.)
-    # Et calculez les encodages trigonométriques sinus/cosinus de l'heure avec np.sin/np.cos.
-    raise NotImplementedError("La fonction feature_engineering doit être implémentée par l'étudiant dans src/data_clean.py")
+    df = df.copy()
+    if pd.api.types.is_datetime64_any_dtype(df[date_col]):
+        df['hour'] = df[date_col].dt.hour
+        df['dayofweek'] = df[date_col].dt.dayofweek
+        print("💡 Nouvelles caractéristiques extraites : 'hour', 'dayofweek'")
+    else:
+        print(f"⚠️ La colonne '{date_col}' n'est pas au format Datetime. feature_engineering ignorée.")
+    return df

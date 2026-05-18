@@ -12,7 +12,7 @@ def set_custom_style(theme: str = 'light'):
     Parameters:
     -----------
     theme : str, default 'light'
-        Thème général des graphiques : 'light' (sleek minimaliste) ou 'dark' (cyberpunk sobre).
+        Thème général des graphiques : 'light' (sleek minimaliste) ou 'dark' (cyberpunk).
     """
     colors_light = ["#1A73E8", "#D93025", "#188038", "#F29900", "#70757A"]
     colors_dark = ["#8AB4F8", "#F28B82", "#81C995", "#FDD663", "#9AA0A6"]
@@ -40,35 +40,44 @@ def set_custom_style(theme: str = 'light'):
     
     print(f"🎨 Charte graphique '{theme}' initialisée avec succès.")
 
-def plot_traffic_density(df: pd.DataFrame, 
-                         station_id: Optional[str] = None) -> plt.Figure:
+def plot_generic_trends(df: pd.DataFrame, x_col: str, y_col: str, group_col: Optional[str] = None) -> plt.Figure:
     """
-    Génère un graphique linéaire de la densité moyenne de trafic (vélos vs bus)
-    par heure de la journée, montrant les profils journaliers d'activité.
+    Génère un graphique linéaire d'évolution temporelle ou tendancielle de base.
     
     Parameters:
     -----------
     df : pd.DataFrame
-        DataFrame enrichi avec les colonnes 'hour', 'bike_count', 'bus_count', 'station_id'.
-    station_id : Optional[str], default None
-        Si spécifié, filtre le graphique sur une station spécifique.
+        Le DataFrame d'entrée contenant les données.
+    x_col : str
+        Le nom de la colonne pour l'axe des abscisses (ex: date, index).
+    y_col : str
+        Le nom de la colonne pour l'axe des ordonnées.
+    group_col : Optional[str], default None
+        Optionnel : Le nom de la colonne catégorielle pour grouper et dessiner plusieurs courbes.
         
     Returns:
     --------
     plt.Figure
         La figure Matplotlib créée.
     """
-    # TODO: Écrire le code de traçage du profil journalier vélos (axe gauche) et bus (axe droit)
-    # Indices :
-    # 1. Calculez les moyennes et écarts-types par heure en groupant par 'hour'.
-    # 2. Utilisez ax.plot() pour les vélos et ax.fill_between() pour leur intervalle de confiance.
-    # 3. Créez un axe secondaire droit avec ax2 = ax.twinx() pour y tracer la courbe des bus.
-    raise NotImplementedError("La fonction plot_traffic_density doit être implémentée par l'étudiant dans src/utils_viz.py")
+    fig, ax = plt.subplots(figsize=(10, 5))
+    if group_col and group_col in df.columns:
+        for val, grp in df.groupby(group_col):
+            ax.plot(grp[x_col], grp[y_col], label=f"{group_col}: {val}", alpha=0.8)
+        ax.legend()
+    else:
+        ax.plot(df[x_col], df[y_col], alpha=0.8)
+    
+    ax.set_xlabel(x_col)
+    ax.set_ylabel(y_col)
+    ax.set_title(f"Évolution de {y_col} par rapport à {x_col}")
+    fig.tight_layout()
+    return fig
 
 def plot_correlation_matrix(df: pd.DataFrame, columns: List[str]) -> plt.Figure:
     """
-    Génère une carte de chaleur (heatmap) élégante montrant la corrélation
-    entre différentes variables (météo, pollution, comptage de transit).
+    Génère une carte de chaleur (heatmap) montrant les corrélations de Pearson
+    entre plusieurs colonnes spécifiées.
     
     Parameters:
     -----------
@@ -82,31 +91,47 @@ def plot_correlation_matrix(df: pd.DataFrame, columns: List[str]) -> plt.Figure:
     plt.Figure
         La figure Matplotlib créée.
     """
-    # TODO: Tracage de la heatmap de corrélations de Spearman
-    # Indices :
-    # 1. Calculez la matrice de corrélation avec df[columns].corr(method='spearman').
-    # 2. Créez un masque pour masquer la partie supérieure redondante (avec np.triu et np.ones_like).
-    # 3. Appelez sns.heatmap() en passant le masque et un cmap divergent (ex: sns.diverging_palette).
-    raise NotImplementedError("La fonction plot_correlation_matrix doit être implémentée par l'étudiant dans src/utils_viz.py")
+    fig, ax = plt.subplots(figsize=(8, 6))
+    corr = df[columns].corr()
+    
+    # Masque pour masquer la partie supérieure redondante
+    mask = np.triu(np.ones_like(corr, dtype=bool))
+    
+    sns.heatmap(corr, mask=mask, annot=True, cmap='coolwarm', fmt=".2f", ax=ax, cbar=True, square=True)
+    ax.set_title("Matrice de Corrélation")
+    fig.tight_layout()
+    return fig
 
-def plot_weather_vs_active_transit(df: pd.DataFrame) -> plt.Figure:
+def plot_bivariate_scatter(df: pd.DataFrame, x_col: str, y_col: str, color_col: Optional[str] = None) -> plt.Figure:
     """
-    Crée un nuage de points dynamique montrant la relation entre
-    la température et le nombre de cyclistes, coloré par le niveau de pollution.
+    Génère un nuage de points (scatter plot) bivarié de base, éventuellement coloré par une troisième variable.
     
     Parameters:
     -----------
     df : pd.DataFrame
-        Le DataFrame.
+        Le DataFrame d'entrée.
+    x_col : str
+        Nom de la colonne sur l'axe X.
+    y_col : str
+        Nom de la colonne sur l'axe Y.
+    color_col : Optional[str], default None
+        Optionnel : Nom de la colonne numérique ou catégorielle pour la coloration des points.
         
     Returns:
     --------
     plt.Figure
-        La figure créée.
+        La figure Matplotlib créée.
     """
-    # TODO: Tracé du nuage de points température vs vélos coloré par pm25 avec courbe de tendance
-    # Indices :
-    # 1. Supprimez les lignes contenant des valeurs nulles sur ces trois variables.
-    # 2. Utilisez ax.scatter() avec c=df['pm25'] et un colormap (ex: cmap='viridis_r').
-    # 3. Calculez et tracez une ligne d'ajustement de tendance (avec np.polyfit et np.poly1d).
-    raise NotImplementedError("La fonction plot_weather_vs_active_transit doit être implémentée par l'étudiant dans src/utils_viz.py")
+    fig, ax = plt.subplots(figsize=(8, 6))
+    
+    if color_col and color_col in df.columns:
+        sc = ax.scatter(df[x_col], df[y_col], c=df[color_col], cmap='viridis', alpha=0.7, edgecolors='none')
+        plt.colorbar(sc, ax=ax, label=color_col)
+    else:
+        ax.scatter(df[x_col], df[y_col], alpha=0.7, edgecolors='none')
+        
+    ax.set_xlabel(x_col)
+    ax.set_ylabel(y_col)
+    ax.set_title(f"Nuage de points : {y_col} en fonction de {x_col}")
+    fig.tight_layout()
+    return fig

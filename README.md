@@ -30,8 +30,8 @@ Nom\], Étudiant(e) 3 : \[Insérer Prénom Nom\]
     Données](#schéma-global-du-pipeline-de-données)
   - [Modélisation Tabulaire (Prédiction
     Vélos)](#modélisation-tabulaire-prédiction-vélos)
-- [🧠 Jalon 2 : Modélisation Prédictive de Trafic (Squelette
-  Étudiant)](#brain-jalon-2--modélisation-prédictive-de-trafic-squelette-étudiant)
+- [🧠 Jalon 2 : Modélisation Prédictive & Apprentissage (Squelette
+  Étudiant)](#brain-jalon-2--modélisation-prédictive--apprentissage-squelette-étudiant)
   - [Modélisation Vision (Analyse
     d’Images)](#modélisation-vision-analyse-dimages)
 - [📷 Jalon 2 : Brique de Vision par Ordinateur (CNN & TensorFlow)
@@ -110,51 +110,43 @@ fonctions correspondantes de votre module `src/data_clean.py`.*
 # 🧹 Jalon 1 : Data Wrangling & Nettoyage (Squelette Étudiant)
 
 Ce notebook correspond à la première étape du **Jalon 1**. L’objectif
-est d’importer le jeu de données brut
-(`data/raw/raw_sensor_traffic.csv`), d’effectuer un audit complet de sa
-qualité (données manquantes, anomalies physiques, formats incohérents)
-et de le nettoyer à l’aide de votre package personnalisé
-`src.data_clean`.
+est d’importer le jeu de données brut (`data/raw/raw_data_sample.csv`),
+d’effectuer un audit de sa qualité (données manquantes, anomalies
+physiques, formats de dates hétérogènes) et de le nettoyer à l’aide de
+votre package personnalisé `src.data_clean`.
 
 ### 1. Importation des packages et chargement des données
 
 ### 2. Audit initial des données
 
 **À faire par l’étudiant :** Explorez le dataset brut pour évaluer sa
-structure et identifier les problèmes à corriger : - Quelles sont les
-dimensions du dataset ? - Quels sont les types de données par colonne
-(détectez les incohérences) ? - Reste-t-il des valeurs nulles ? Quel est
-le taux de valeurs manquantes par variable ? - Y a-t-il des lignes
-dupliquées ?
+structure : - Quelles sont les dimensions du dataset ? - Quels sont les
+types de données par colonne ? - Reste-t-il des valeurs nulles ? Quel
+est le taux de valeurs manquantes par variable ? - Y a-t-il des doublons
+?
 
 ### 3. Nettoyage et uniformisation des Dates
 
 **À faire par l’étudiant :** Appliquez la fonction `clean_dates` de
 votre module `src.data_clean` pour convertir la colonne `timestamp` en
-type Datetime uniforme, en gérant les formats mixtes présents dans le
-fichier brut.
+type Datetime uniforme.
 
 ### 4. Identification et Traitement des Outliers (Anomalies physiques)
 
-**À faire par l’étudiant :** Analysez les statistiques descriptives
-globales du jeu de données pour identifier les valeurs physiques
-aberrantes. Appliquez ensuite votre fonction `handle_outliers` de
-`src.data_clean` pour remplacer ces anomalies par des valeurs
-appropriées ou par `NaN`.
+**À faire par l’étudiant :** Analysez les valeurs de la colonne `value`
+et appliquez votre fonction `handle_outliers` pour filtrer les valeurs
+physiques aberrantes (inférieures à 0 ou supérieures à 100).
 
 ### 5. Imputation des valeurs manquantes
 
-**À faire par l’étudiant :** Traitez à présent l’ensemble des valeurs
-manquantes (les `NaN` initiaux combinés avec ceux issus du traitement
-des outliers). Veillez à trier chronologiquement vos données par station
-avant d’appliquer votre fonction `impute_missing_values` pour garantir
-la cohérence temporelle.
+**À faire par l’étudiant :** Appliquez la fonction
+`impute_missing_values` pour remplir les NaNs issus du chargement
+initial ou du nettoyage des anomalies.
 
 ### 6. Sauvegarde des données propres
 
 Enregistrez votre DataFrame nettoyé dans
-`data/processed/cleaned_traffic_weather.csv` afin de l’exploiter dans
-les étapes suivantes (exploration et modélisation).
+`data/processed/cleaned_data_sample.csv`.
 
 ------------------------------------------------------------------------
 
@@ -184,10 +176,10 @@ temporelles cycliques (comme l’encodage sinus / cosinus des heures).*
 # 📊 Jalon 1 : Analyse Exploratoire des Données (EDA) & Visualisation (Squelette Étudiant)
 
 Ce notebook est dédié à la découverte de relations clés et à l’analyse
-visuelle de nos flux de déplacements. À partir du jeu de données propre
-généré précédemment, nous allons enrichir nos variables explicatives et
-appeler les fonctions de notre module de visualisation `src.utils_viz`
-pour générer des graphiques professionnels.
+visuelle de nos données. À partir du jeu de données propre généré
+précédemment, nous allons enrichir nos variables explicatives et appeler
+les fonctions de notre module de visualisation `src.utils_viz` pour
+générer des graphiques professionnels.
 
 ### 1. Importation des packages et configuration du style
 
@@ -195,38 +187,33 @@ pour générer des graphiques professionnels.
 
 **À faire par l’étudiant :** Appliquez la fonction `feature_engineering`
 de `src.data_clean` pour enrichir votre DataFrame en caractéristiques de
-temps classiques (heures, jours de la semaine, mois) et trigonométriques
-(sinus, cosinus).
+temps classiques (heures, jours de la semaine).
 
 ### 3. Visualisations Professionnelles
 
-#### A. Profils de déplacements journaliers
+#### A. Profils d’évolution et tendances
 
-**À faire par l’étudiant :** Appliquez la fonction
-`plot_traffic_density` de votre module `src.utils_viz` pour tracer
-l’évolution journalière moyenne horaire comparant le transit des vélos
-et des bus pour la station **ST_01**.
+**À faire par l’étudiant :** Appliquez la fonction `plot_generic_trends`
+de votre module `src.utils_viz` pour tracer l’évolution de la valeur par
+rapport au temps.
 
 #### B. Matrice de corrélation multi-variables
 
 **À faire par l’étudiant :** Appliquez la fonction
 `plot_correlation_matrix` de votre module `src.utils_viz` pour calculer
-et afficher graphiquement la carte thermique des corrélations de
-Spearman sur les variables :
-`['bike_count', 'bus_count', 'temperature', 'humidity', 'pm25']`.
+et afficher graphiquement la carte thermique des corrélations sur les
+colonnes `['value', 'hour', 'dayofweek']`.
 
-#### C. Température vs Mobilité Active sous impact Pollution
+#### C. Nuage de points bivarié
 
-**À faire par l’étudiant :** Générez le nuage de points de la relation
-température vs cyclistes coloré selon la pollution PM2.5, ajusté par la
-tendance quadratique, en utilisant votre fonction
-`plot_weather_vs_active_transit`.
+**À faire par l’étudiant :** Générez un nuage de points de la relation
+heure vs valeur en colorant les points selon la variable `dayofweek`, en
+utilisant votre fonction `plot_bivariate_scatter`.
 
-### 4. Synthèse des insights clés
+### 4. Synthèse des observations clés
 
-Sur la base de vos figures, listez les **3 à 5 observations majeures**
-sur les comportements de mobilité et de pollution de la métropole. Ces
-observations alimenteront votre rapport final.
+Sur la base de vos figures, listez les **insights majeurs** observés sur
+le comportement de vos variables.
 
 ------------------------------------------------------------------------
 
@@ -299,31 +286,29 @@ variables explicatives.*
 
 ### Travaux Pratiques de Modélisation Tabulaire
 
-# 🧠 Jalon 2 : Modélisation Prédictive de Trafic (Squelette Étudiant)
+# 🧠 Jalon 2 : Modélisation Prédictive & Apprentissage (Squelette Étudiant)
 
 Dans ce notebook du **Jalon 2**, l’objectif est d’implémenter un
-pipeline complet d’apprentissage supervisé pour prédire le nombre
-horaire de cyclistes (`bike_count`) à l’aide de Scikit-Learn.
+pipeline complet d’apprentissage supervisé pour prédire une variable
+cible (`value`) à l’aide de Scikit-Learn.
 
 Vous devrez mettre en œuvre une stratégie de découpage train/test
-chronologique pour respecter la causalité des séries temporelles.
+chronologique pour respecter la causalité temporelle.
 
 ### 1. Préparation de l’environnement
 
 ### 2. Définition des variables et split chronologique
 
 **À faire par l’étudiant :** - Identifiez vos colonnes prédictives
-(features numériques et temporelles) et la colonne cible
-(`bike_count`). - Configurez un split temporel simple : utilisez par
-exemple les 12 premiers jours pour l’entraînement (`Train`) et les 3
-derniers jours pour l’évaluation (`Test`). N’utilisez pas de découpage
-aléatoire !
+(`features`) et la colonne cible (`value`). - Séparez chronologiquement
+vos données en ensembles d’entraînement (`Train`) et de test (`Test`).
+N’utilisez pas de split aléatoire !
 
 ### 3. Entraînement du modèle de Forêt Aléatoire
 
 **À faire par l’étudiant :** - Instanciez et entraînez un modèle
-`RandomForestRegressor` sur vos données d’entraînement. - Générez les
-prédictions `y_pred` du modèle sur l’ensemble de test.
+`RandomForestRegressor`. - Générez les prédictions `y_pred` sur
+l’ensemble de test.
 
 ### 4. Évaluation métrique
 
@@ -331,14 +316,10 @@ prédictions `y_pred` du modèle sur l’ensemble de test.
 d’évaluation requis : - **MAE** (Mean Absolute Error) - **RMSE** (Root
 Mean Squared Error) - **R²** (Coefficient de détermination)
 
-Reportez ces valeurs finales dans le tableau de votre rapport Quarto !
+### 5. Importance des variables explicatives
 
-### 5. Importance des variables et Visualisation chronologique
-
-**À faire par l’étudiant :** - Extrayez et tracez l’importance relative
-de chaque caractéristique prédictive dans votre forêt d’arbres. - Tracez
-un graphique temporel comparant la courbe des observations de test
-réelles (`y_test`) et celle des prédictions (`y_pred`).
+**À faire par l’étudiant :** Extrayez et affichez l’importance relative
+de chaque caractéristique prédictive.
 
 ## Modélisation Vision (Analyse d’Images)
 
@@ -356,17 +337,16 @@ d’apprentissage obtenues.*
 
 Ce notebook est dédié à la brique d’analyse d’images du **Jalon 2**.
 L’objectif est de concevoir un Réseau de Neurones Convolutif (CNN) sous
-TensorFlow/Keras pour classifier l’état du trafic routier à partir
-d’images de caméras urbaines.
+TensorFlow/Keras pour classifier des motifs géométriques simples (Classe
+0: Cercle vs Classe 1: Multiples Rectangles).
 
 ### 1. Préparation de l’environnement
 
 ### 2. Génération du jeu d’images synthétiques
 
 Pour travailler de manière autonome sans importer de lourdes bases
-d’images externes, nous mettons à votre disposition cette fonction
-utilitaire générant des images simulées en $64    imes 64$ pixels de
-route vide (Classe 0) vs route congestionnée (Classe 1).
+d’images externes, cette fonction utilitaire génère des images simulées
+en $64 \times 64$ pixels de formes simples (Cercle vs Rectangles).
 
 ### 3. Split d’évaluation (Entraînement / Validation)
 
@@ -376,20 +356,14 @@ route vide (Classe 0) vs route congestionnée (Classe 1).
 ### 4. Conception de l’architecture du CNN
 
 **À faire par l’étudiant :** Instanciez un réseau convolutif séquentiel
-Keras comprenant : - Une première couche `Conv2D` (ex: 16 filtres de
-3x3) suivie d’un `MaxPooling2D`. - Une seconde couche `Conv2D` (ex: 32
-filtres de 3x3) suivie d’un `MaxPooling2D`. - Une couche `Flatten` pour
-aplatir le tenseur. - Une couche fully-connected `Dense` régularisée par
-du `Dropout`. - Une couche `Dense` finale de classification binaire
-(avec activation sigmoïde).
+Keras comprenant des couches `Conv2D`, `MaxPooling2D`, `Flatten`,
+`Dense` et un `Dropout` pour classifier nos deux formes géométriques.
 
-### 5. Compilation, Entraînement et Visualisation
+### 5. Compilation et Entraînement
 
-**À faire par l’étudiant :** - Compilez le modèle en sélectionnant
-l’optimiseur `'adam'` et la fonction de perte binaire adaptée. -
-Entraînez votre CNN sur environ 15 époques. - Récupérez les historiques
-de perte (`loss`) et précision (`accuracy`) et tracez les courbes
-d’apprentissage d’entraînement vs validation.
+**À faire par l’étudiant :** - Compilez le modèle avec l’optimiseur
+`'adam'` et la fonction de perte binaire. - Entraînez votre CNN sur
+environ 5 époques.
 
 ------------------------------------------------------------------------
 
