@@ -98,6 +98,7 @@ Explorez l'arborescence ci-dessous et téléchargez l'archive complète pour dé
 
 ### ⚙️ Automatisation avec Taskfile
 Le projet inclut un outil de productivité nommé `go-task` (ou `task`). À la racine du projet, vous pouvez ouvrir votre terminal et utiliser les commandes suivantes pour simplifier votre flux de travail :
+
 - `task compile` : Extrait et compile vos notebooks et prépare les documents Quarto de jalon.
 - `task render` : Compile l'ensemble de votre rapport final en HTML, PDF (via Typst) et Markdown (README.md).
 - `task preview` : Lance un serveur local Quarto de prévisualisation en temps réel pour rédiger confortablement.

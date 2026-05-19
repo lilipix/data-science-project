@@ -36,6 +36,7 @@ link-citations: true
 
 ## Contexte du Projet
 *À rédiger par les étudiants — Pistes de réflexion :*
+
 - *Quels sont les objectifs globaux et le domaine d'étude de votre projet ?*
 - *En quoi ce sujet de recherche est-il pertinent et stratégique ?*
 - *Pourquoi l'analyse quantitative de ce jeu de données est-elle indispensable pour répondre à votre problématique ?*
@@ -44,6 +45,7 @@ link-citations: true
 
 ## Objectif Analytique
 *À rédiger par les étudiants — Pistes de réflexion :*
+
 - *Quelles sont les variables cibles principales et la tâche globale de modélisation (classification, régression, clustering, etc.) ?*
 - *Comment le couplage de données multi-sources et l'intégration de différents types de données (tabulaires, images, signaux, etc.) enrichissent-ils l'analyse ?*
 - *Quels sont les livrables analytiques attendus pour répondre à votre problématique et guider les prises de décisions ?*
