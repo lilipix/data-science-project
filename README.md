@@ -1,6 +1,7 @@
 # Mon Projet Data Science
-Étudiant(e) 1 : Dina Chaouki, Étudiant(e) 2 : Cécile Audrée Demeuni, Étudiant(e) 3 : Aurélie Demure
-2026-05-18
+Étudiant(e) 1 : Dina Chaouki, Étudiant(e) 2 : Cécile Audrée
+Demeuni, Étudiant(e) 3 : Aurélie Demure
+2026-05-20
 
 - [Introduction et Contexte Métier](#sec-intro)
   - [Contexte du Projet](#contexte-du-projet)
@@ -16,6 +17,7 @@
 - [🧹 Étape 2 : Préparation & Nettoyage de Données (Data Wrangling)
   (Squelette
   Étudiant)](#broom-étape-2--préparation--nettoyage-de-données-data-wrangling-squelette-étudiant)
+  - [Nettoyage des séries](#nettoyage-des-séries)
 - [Visualisation Multidimensionnelle (Insights)](#sec-viz)
   - [Chapitre 3 : Travaux Pratiques d’Exploration
     Visuelle](#chapitre-3--travaux-pratiques-dexploration-visuelle)
@@ -111,9 +113,8 @@ requêtes API, bases de données, etc.).
 
 ### 3. Intégration de données secondaires (Multi-Sources)
 
-**À COMPLÉTER PAR L’ÉTUDIANT :** Mettez en place la récupération de vos
-données complémentaires (par exemple, appels d’API fictifs ou réels,
-données météo, géographiques, ou financiers complémentaires).
+L’analyse se base uniquement sur le dataset principal. Nous n’avons pas
+intégré de données secondaires.
 
 ### 4. Fusion des sources (Optionnel)
 
@@ -142,7 +143,7 @@ d’effectuer un audit de qualité de vos données brutes, puis de mettre en
 la qualité du dataset (taux de valeurs manquantes, présence de doublons,
 types erronés).
 
-### 3. Uniformisation des Formats de Dates
+### 3. Uniformisation des Formats de Dates =\> pas de dates dans notre dataset
 
 **À COMPLÉTER PAR L’ÉTUDIANT :** Uniformisez la colonne temporelle pour
 la convertir dans un type datetime standardisé via votre module
@@ -159,6 +160,8 @@ valeurs aberrantes en NaNs.
 **À COMPLÉTER PAR L’ÉTUDIANT :** Appliquez des stratégies d’imputation
 adaptées (interpolation temporelle, médiane, etc.) sur les valeurs
 manquantes générées ou initiales.
+
+## Nettoyage des séries
 
 ### 6. Sauvegarde des données propres
 
@@ -188,20 +191,19 @@ tracé `src.utils_viz`.
 
 ### 3. Tracés et analyses graphiques
 
-#### A. Évolution des tendances dans le temps
+#### A. Distribution des prix
 
-**À COMPLÉTER PAR L’ÉTUDIANT :** Tracez les tendances globales à l’aide
-de la fonction `uv.plot_generic_trends`.
+#### B. Répartition des marques
 
-#### B. Carte de chaleur des corrélations
+#### C. Répartition des types d’ordinateurs
 
-**À COMPLÉTER PAR L’ÉTUDIANT :** Visualisez graphiquement les
-corrélations de Pearson à l’aide de `uv.plot_correlation_matrix`.
+#### D. Matrice de corrélation
 
-#### C. Nuage de points bivarié
+#### E. Prix moyen par marque
 
-**À COMPLÉTER PAR L’ÉTUDIANT :** Générez une analyse graphique bivariée
-en utilisant `uv.plot_bivariate_scatter`.
+#### F. Relation poids / prix
+
+#### G. Relation stockage / prix
 
 ------------------------------------------------------------------------
 
