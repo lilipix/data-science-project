@@ -3,6 +3,24 @@
 Demeuni, Étudiant(e) 3 : Aurélie Demure
 2026-05-20
 
+### Dashboard interactif
+
+Le dashboard est disponible dans le fichier `dashboard.py`.
+
+Pour le lancer localement, il faut se placer à la racine du projet puis exécuter :
+
+```bash
+pip install requirements.txt
+streamlit run dashboard.py
+```
+
+L'application s'ouvre dans le navigateur à l'adresse locale :
+
+```bash
+http://localhost:8501
+```
+
+
 - [Introduction et Contexte Métier](#sec-intro)
   - [Contexte du Projet](#contexte-du-projet)
   - [Objectif Analytique](#objectif-analytique)
