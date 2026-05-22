@@ -8,7 +8,7 @@ Demeuni, Étudiant(e) 3 : Aurélie Demure
 Le dashboard est visible sur ce lien : 
 
 ```bash
-[Dashboard](https://data-science-project-v8hxwnzwhtiperpwernkvr.streamlit.app/)
+https://data-science-project-v8hxwnzwhtiperpwernkvr.streamlit.app/
 ```
 
 Si le lien ne fonctionne pas, vous pouvez visualiser le dashboard localement.
