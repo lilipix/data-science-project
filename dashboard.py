@@ -155,7 +155,7 @@ with left_col:
         st.markdown("### 💰 Simulateur de prix")
         st.markdown("""
         <div class="sim-help">
-            Renseignez les caractéristiques du ordinateur. Le modèle Random Forest
+            Renseignez les caractéristiques d'un ordinateur portable. Le modèle Random Forest
             estime un prix cohérent avec les données du marché observé.
         </div>
         """, unsafe_allow_html=True)
