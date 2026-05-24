@@ -199,7 +199,7 @@ Dans une démarche de transparence scientifique et académique, cette section d�
 
 | Outil d'IA | Cas d'usage (Pourquoi ?) | Méthode d'utilisation (Comment ?) | Rôle et Validation Humaine |
 | :--- | :--- | :--- | :--- |
-| **[Outil d'IA]** | *[À compléter par les étudiants]* | *[À compléter par les étudiants]* | *[À compléter par les étudiants]* |
+| **ChatGPT** | *Explication de notions* | *sur le navigateur* | *Croisement avec le cours* |
 
 ## Principes de Rigueur et Responsabilité
 

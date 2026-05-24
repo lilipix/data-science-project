@@ -367,11 +367,11 @@ with right_col:
 
     with row2_l:
         st.markdown('<div class="chart-title">Heatmap prix moyen · Marque × Type</div>', unsafe_allow_html=True)
-        st.markdown('<div class="chart-subtitle">Plus la case est foncée, plus le prix moyen est élevé</div>', unsafe_allow_html=True)
+        st.markdown('<div class="chart-subtitle">8 marques les plus représentées · Plus la case est foncée, plus le prix moyen est élevé</div>', unsafe_allow_html=True)
 
         top_companies = (
             df_filtered.groupby("Company")["Price_EUR"]
-            .mean().nlargest(8).index.tolist()
+            .count().nlargest(8).index.tolist()
         )
         heatmap_df = (
             df_filtered[df_filtered["Company"].isin(top_companies)]
