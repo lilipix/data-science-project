@@ -17,7 +17,3 @@ streamlit>=1.30.0
 # Outils de développement
 ipykernel
 jupyter
-quarto
-
-# Pour importer les datasets
-kagglehub

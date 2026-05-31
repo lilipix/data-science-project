@@ -16,7 +16,7 @@ Si le lien ne fonctionne pas, vous pouvez visualiser le dashboard localement.
 Pour le lancer il faut se placer à la racine du projet puis exécuter :
 
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 streamlit run dashboard.py
 ```
 
